@@ -21,6 +21,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +57,7 @@ public class OpacBluemapIntegration implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> minecraftServer = server);
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> minecraftServer = null);
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("openpac-bluemap")
-            .requires(s -> s.hasPermission(2))
+            .requires(s -> s.permissions() instanceof LevelBasedPermissionSet set && set.level().id() >= 2)
             .then(literal("refresh-now")
                 .requires(s -> BlueMapAPI.getInstance().isPresent())
                 .executes(ctx -> {
