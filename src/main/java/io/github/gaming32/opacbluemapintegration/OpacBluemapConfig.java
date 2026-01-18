@@ -10,6 +10,8 @@ public class OpacBluemapConfig {
     private float markerMinY = 75f;
     private float markerMaxY = 75f;
     private boolean depthTest = false;
+    private int lineOpacity = 200;
+    private int fillOpacity = 64;
 
     public void read(JsonReader reader) throws IOException {
         reader.beginObject();
@@ -20,6 +22,8 @@ public class OpacBluemapConfig {
                 case "markerMinY" -> markerMinY = reader.nextNumber().floatValue();
                 case "markerMaxY" -> markerMaxY = reader.nextNumber().floatValue();
                 case "depthTest" -> depthTest = reader.nextBoolean();
+                case "lineOpacity" -> lineOpacity =  reader.nextInt();
+                case "fillOpacity" -> fillOpacity =  reader.nextInt();
                 default -> {
                     OpacBluemapIntegration.LOGGER.warn("Unknown OpenPaC BlueMap config key {}. Skipping.", key);
                     reader.skipValue();
@@ -45,6 +49,11 @@ public class OpacBluemapConfig {
         writer.comment("Default is false.");
         writer.name("depthTest").value(depthTest);
 
+        writer.comment("These two values set the opacity of the line and fill respectively, and can range from 0 to 255");
+        writer.comment("Default is 200 for the line and 64 for the fill.");
+        writer.name("lineOpacity").value(lineOpacity);
+        writer.name("fillOpacity").value(fillOpacity);
+
         writer.endObject();
     }
 
@@ -67,4 +76,13 @@ public class OpacBluemapConfig {
     public boolean isDepthTest() {
         return depthTest;
     }
+
+    public int setLineOpacity() {
+        return lineOpacity;
+    }
+
+    public int setFillOpacity() {
+        return fillOpacity;
+    }
+
 }
